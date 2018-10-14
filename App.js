@@ -1,16 +1,10 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import Map from './app/components/Map';
+import { MarkerSet } from './app/components/MarkerSet';
 import { Location, Permissions } from 'expo';
 import DataService from './app/services/data';
 
-// A placeholder until we get our own location
-const region = {
-  latitude: 37.321996988,
-  longitude: -122.0325472123455,
-  latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421
-}
 
 const deltas = {
   latitudeDelta: 0.0922,
@@ -24,12 +18,19 @@ export default class App extends React.Component {
         longitude: 0.0,
         ...deltas
     },
-    hashes: []
+    markers: []
+  }
+
+  buildMarkers = async () => {
+      hashes = await this.getHashes()
+      markers = <MarkerSet data={hashes}/>
+      this.setState({ markers })
   }
 
   componentWillMount() {
-      this.getLocationAsync();
-    }
+    this.getLocationAsync();
+    this.buildMarkers();
+  }
 
   getHashes = async () => {
       const { latitude, longitude } = this.state.region;
@@ -37,7 +38,7 @@ export default class App extends React.Component {
       const hashes = await DataService.getHashes();
       console.log("Locations:")
       console.log(hashes)
-      this.setState({ hashes });
+      return hashes
   }
 
   getLocationAsync = async () => {
@@ -59,14 +60,14 @@ export default class App extends React.Component {
     }
 
   render() {
-    const { region, hashes } = this.state;
+    const { region, markers } = this.state;
     console.log('State at time of render:')
     console.log(this.state)
     return (
       <SafeAreaView style={styles.container}>
         <Map
           region={region}
-          places={hashes}
+          markers={markers}
         />
       </SafeAreaView>
     );

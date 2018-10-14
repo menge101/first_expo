@@ -5,15 +5,8 @@ import { MapView } from 'expo';
 const Marker = MapView.Marker
 
 export default class Map extends Component {
-  renderMarkers() {
-      console.log(this.props)
-    return this.props.places.map((place, i) => (
-      <Marker key={i} title={place.address} coordinate={place.coordinate}/>
-    ))
-  }
-
   render() {
-    const { region } = this.props
+    const { region, markers } = this.props
     return (
       <MapView
         style={styles.container}
@@ -21,7 +14,7 @@ export default class Map extends Component {
         showsUserLocation
         showsMyLocationButton
       >
-        {this.renderMarkers()}
+      {markers}
       </MapView>
     )
   }
