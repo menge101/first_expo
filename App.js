@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import Map from './app/components/Map';
-import { MarkerSet } from './app/components/MarkerSet';
+import { ColoredMarkerSet as MarkerSet } from './app/components/MarkerSet';
 import { Location, Permissions } from 'expo';
 import DataService from './app/services/data';
 
@@ -11,13 +11,17 @@ const deltas = {
   longitudeDelta: 0.0421
 };
 
+const fixed_region = {
+  latitude: 40.460392,
+  longitude: -79.919404,
+  latitudeDelta: 0.0922,
+  longitudeDelta: 0.0421,
+  ...deltas
+}
+
 export default class App extends React.Component {
   state = {
-    region: {
-        latitude: 0.0,
-        longitude: 0.0,
-        ...deltas
-    },
+    region: fixed_region,
     markers: []
   }
 
@@ -28,7 +32,6 @@ export default class App extends React.Component {
   }
 
   componentWillMount() {
-    this.getLocationAsync();
     this.buildMarkers();
   }
 
