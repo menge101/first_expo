@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import Map from './app/components/Map';
-import { ColoredMarkerSet as MarkerSet } from './app/components/MarkerSet';
+import { HashMarkerSet as MarkerSet } from './app/components/MarkerSet';
 import { Location, Permissions } from 'expo';
 import DataService from './app/services/data';
 
