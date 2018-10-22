@@ -43,7 +43,13 @@ export class ColoredMarkerSet extends Component {
 
 export class SvgMarkerSet extends Component {
     map_func(event, i) {
-       return <SimpleSvgMarker key={i} title={event.address} coordinate={event.coordinate}/>
+       return (
+        <SimpleSvgMarker
+          key={i}
+          title={event.address}
+          coordinate={event.coordinate}
+          datetime={event.date} />
+        )
     }
 
     render() {
@@ -128,5 +134,46 @@ export class HashMarkerSet extends Component {
     render() {
         markers = this.props.data.map(this.map_func)
         return markers
+    }
+}
+
+export class OrderedHashMarkerSet extends Component {
+    constructor(props) {
+      super(props)
+      this.hue = this.hue.bind(this)
+      this.map_func = this.map_func.bind(this)
+      this.compare = this.compare.bind(this)
+    }
+
+    compare(a, b) {
+        if (a.start < b.start)
+          return -1
+        if (a.start > b.start)
+          return 1
+        return 0
+    }
+
+    hue(color) { return '#' + convert.hsv.hex(color, 100, 100) }
+
+    map_func(colorMultiplier, event, i) {
+        const colorCode = i * colorMultiplier
+        const titleText = event.start + ' - ' + i + ' - ' + colorCode
+       return (
+         <HashMarker
+           key={i}
+           title={titleText}
+           coordinate={event.coordinate}
+           fillColor={this.hue(colorCode)}
+           strokeColor='#000000'
+         />)
+    }
+
+    render() {
+        colorMax = 255
+        markers = this.props.data
+        colorMultiplier = colorMax / markers.length
+        markers.sort(this.compare)
+        mapped = markers.map((event, i) => { return this.map_func(colorMultiplier, event, i) })
+        return mapped
     }
 }
