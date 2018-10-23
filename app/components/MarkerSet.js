@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { MapView } from 'expo';
-import { HashMarker, SimpleColoredMarker, SimpleSvgMarker } from './SvgMarker'
+import { GrouperMarker, HashMarker, SimpleColoredMarker, SimpleSvgMarker } from './SvgMarker'
 var convert = require('color-convert');
 
 const Marker = MapView.Marker
@@ -175,5 +175,29 @@ export class OrderedHashMarkerSet extends Component {
         markers.sort(this.compare)
         mapped = markers.map((event, i) => { return this.map_func(colorMultiplier, event, i) })
         return mapped
+    }
+}
+
+export class GroupedMarkerSet extends Component {
+    constructor(props) {
+      super(props)
+      this.hue = this.hue.bind(this)
+      this.map_func = this.map_func.bind(this)
+      this.compare = this.compare.bind(this)
+    }
+
+    compare(a, b) {
+        if (a.start < b.start)
+          return -1
+        if (a.start > b.start)
+          return 1
+        return 0
+    }
+
+    hue(color) { return '#' + convert.hsv.hex(color, 100, 100) }
+
+    render() {
+        markers = this.props.data.map(this.map_func)
+        return markers
     }
 }

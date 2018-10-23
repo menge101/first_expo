@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { MapView, Svg } from 'expo';
 
-const Marker = MapView.Marker
-const G = Svg.G;
-const Ellipse = Svg.Ellipse;
-const Path = Svg.Path;
+const { Marker } = MapView
+const { Defs, Ellipse, G, Path, RadialGradient } = Svg
 
 export class SimpleSvgMarker extends Component {
     render() {
@@ -57,6 +55,18 @@ export class HashMarker extends Component {
                         <Path d="m27.232 15.13c-0.33825-0.17306-0.44282-0.42804-0.34657-0.84504 0.11248-0.48728 0.38056-0.90062 0.95276-1.469 1.4379-1.4283 3.0612-1.4487 2.7677-0.03494-0.27395 1.3196-2.4392 2.8271-3.3739 2.349z" stroke-width=".038252"/>
                         <Path d="m28.335 17.878c-0.08353-0.03357-0.20251-0.16723-0.2644-0.29701-0.16556-0.34718-0.03909-0.70494 0.40683-1.1509 1.169-1.169 3.2451-1.3228 2.9399-0.21782-0.08094 0.29316-0.78991 1.0739-1.1859 1.306-0.61044 0.35774-1.4875 0.5241-1.8965 0.35972z" stroke-width=".038252"/>
                     </G>
+                </Svg>
+            </Marker>
+        )
+    }
+}
+
+export class GrouperMarker extends Component {
+    render() {
+        return (
+            <Marker {...this.props} anchor={{'x': 0.3, 'y': 1}} centerOffset={{'x': 8.592, 'y': 0}}>
+                <Svg width="40" height="40" viewBox="0 0 40 40">
+                    <Ellipse cx="20" cy="20" r="20"/>
                 </Svg>
             </Marker>
         )
