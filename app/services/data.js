@@ -4,12 +4,16 @@ const api = axios.create({
     baseURL: 'http://10.0.2.2:8000'
 })
 
-const getHashes = () => {
-    hashes = api
-        .get('/upcoming_trails')
+const getHashes = async (region) => {
+    hashes = await api
+        .get('/upcoming_trails', {
+            params: {
+                region: region
+            }
+        })
         .then(result => {
             console.log(result);
-            return result.data['trails']
+            return result.data['events']
         })
         .catch(error => {
             console.log(error);
