@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { MapView } from 'expo';
-import { GrouperMarker, HashMarker, SimpleColoredMarker, SimpleSvgMarker } from './SvgMarker'
+import { GeoJsonHashMarker, GrouperMarker, HashMarker, SimpleColoredMarker, SimpleSvgMarker } from './SvgMarker'
 var convert = require('color-convert');
 
 const Marker = MapView.Marker
@@ -82,6 +82,34 @@ export class DebugSvgMarkerSet extends Component {
         c = <SimpleSvgMarker key='3' title={marker.address} coordinate={c_coords}/>
         z = [a, b, c]
         return z
+    }
+}
+
+export class DebugGeoJsonMarkerSet extends Component {
+    constructor(props) {
+      super(props)
+      this.hue = this.hue.bind(this)
+      this.map_func = this.map_func.bind(this)
+    }
+
+    hue(color) { return '#' + convert.hsv.hex(color, 100, 100) }
+
+    map_func(event, i) {
+       latitude = event.geometry.coordinates[1]
+       longitude = event.geometry.coordinates[0]
+       coordinates = {latitude: latitude, longitude: longitude}
+       return (
+         <HashMarker
+           key={i}
+           title={event.properties.address}
+           coordinate={coordinates}
+           fillColor={this.hue(i)}
+           strokeColor='#000000'
+         />)
+    }
+
+    render() {
+        return this.map_func(this.props.data[0], 0)
     }
 }
 
@@ -195,6 +223,35 @@ export class GroupedMarkerSet extends Component {
     }
 
     hue(color) { return '#' + convert.hsv.hex(color, 100, 100) }
+
+    render() {
+        markers = this.props.data.map(this.map_func)
+        return markers
+    }
+}
+
+export class GeoJsonMarkerSet extends Component {
+    constructor(props) {
+      super(props)
+      this.hue = this.hue.bind(this)
+      this.map_func = this.map_func.bind(this)
+    }
+
+    hue(color) { return '#' + convert.hsv.hex(color, 100, 100) }
+
+    map_func(event, i) {
+       latitude = event.geometry.coordinates[1]
+       longitude = event.geometry.coordinates[0]
+       coordinates = {latitude: latitude, longitude: longitude}
+       return (
+         <HashMarker
+           key={i}
+           title={event.properties.address}
+           coordinate={coordinates}
+           fillColor={this.hue(i)}
+           strokeColor='#000000'
+         />)
+    }
 
     render() {
         markers = this.props.data.map(this.map_func)
