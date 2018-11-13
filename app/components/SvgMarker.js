@@ -72,3 +72,14 @@ export class GrouperMarker extends Component {
         )
     }
 }
+
+export class GeoJsonHashMarker extends Component {
+    render() {
+        latitude = marker.geometry.coordinates[1]
+        longitude = marker.geometry.coordinates[0]
+        coordinates = {latitude: latitude, longitude: longitude}
+        return (
+            <HashMarker coordinate={coordinates} {...this.props}/>
+        )
+    }
+}
