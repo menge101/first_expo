@@ -258,3 +258,32 @@ export class GeoJsonMarkerSet extends Component {
         return markers
     }
 }
+
+export class ClusteredMarkerSet extends Component {
+    constructor(props) {
+      super(props)
+      this.hue = this.hue.bind(this)
+      this.map_func = this.map_func.bind(this)
+    }
+
+    hue(color) { return '#' + convert.hsv.hex(color, 100, 100) }
+
+    map_func(event, i) {
+       latitude = event.geometry.coordinates[1]
+       longitude = event.geometry.coordinates[0]
+       coordinates = {latitude: latitude, longitude: longitude}
+       return (
+         <HashMarker
+           key={i}
+           title={event.properties.address}
+           coordinate={coordinates}
+           fillColor={this.hue(i)}
+           strokeColor='#000000'
+         />)
+    }
+
+    render() {
+        markers = this.props.data.map(this.map_func)
+        return markers
+    }
+}
